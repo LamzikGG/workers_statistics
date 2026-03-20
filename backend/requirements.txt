@@ -7,3 +7,4 @@ alembic
 python-multipart
 pandas
 openpyxl
+pika
