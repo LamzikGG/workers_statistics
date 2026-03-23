@@ -1,14 +1,18 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from app.services.file_processor import FileProcessor
+import shutil
+from ...services.file_processor import FileProcessor
+import os
 
 router = APIRouter(prefix = "/upload", tags = ["upload"])
 
-@router.post("/data")
+data_files = "./data_json"
+os.mkdir(data_files, exist_ok = True)
+
+@router.post("/uplod_file")
 async def upload_data(file: UploadFile = File(...)):
-    processor = FileProcessor()
-    task_id = await processor.process_upload(file)
-    return{
-        "task_id": task_id,
-        "message": "файл принят",
-        "status_check": f'task/{task_id}'
-    }
+    with open(f"./data_files/{file.filename}", "wb") as f:
+        if file.filename in {".xlsx", ".xml", ".xls", ".csv"}:
+            return shutil.copyfileobj(file.file, f)
+        else:
+            raise HTTPException(status_code=400, detail = "Не правильный формат")
