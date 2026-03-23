@@ -1,5 +1,6 @@
 FROM python:3.12.12-slim
 WORKDIR /app
+RUN python3 -m venv venv && source venv/bin/activate
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY /app /app
