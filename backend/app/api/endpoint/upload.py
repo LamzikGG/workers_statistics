@@ -10,11 +10,10 @@ import shutil
 
 router = APIRouter(prefix="/upload", tags=["upload"])
 
-# 📁 Папка для загруженных файлов
+
 data_files = "../data_json"
 os.makedirs(data_files, exist_ok=True)
 
-# ✅ Расширения для валидации
 normal_files = {".xlsx", ".xml", ".xls", ".csv"}
 
 @router.post("/upload_file")
