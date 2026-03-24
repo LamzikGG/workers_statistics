@@ -1,0 +1,15 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    port:
+      - "5672:5672" #Порт для отправки сообщений(xlsx)
+      - "" #Веб интерфейс
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: workers_statistics
+    port:
+      - "8000:8000"
+    volumes:
+      - ./backend/app:/app/main
