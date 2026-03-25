@@ -1,0 +1,10 @@
+fastapi
+pydantic
+uvicorn
+sqlalchemy
+python-dotenv
+alembic
+python-multipart
+pandas
+openpyxl
+pika

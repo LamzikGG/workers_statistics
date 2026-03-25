@@ -1,0 +1,7 @@
+.venv
+.env
+venv
+test.doc
+test.xlsx
+data_json
+json_file
