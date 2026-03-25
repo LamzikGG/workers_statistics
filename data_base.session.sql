@@ -7,7 +7,7 @@ CREATE TABLE employees (
     plan_monthly_revenue DECIMAL(15, 2) DEFAULT 0.00,
     plan_monthly_meetings INT DEFAULT 0
 );
-#git
+
 CREATE TABLE opportunities (
     opportunity_id SERIAL PRIMARY KEY,
     employee_id INT NOT NULL,
