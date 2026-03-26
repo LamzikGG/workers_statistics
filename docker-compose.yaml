@@ -3,7 +3,7 @@ services:
     image: rabbitmq:3-management
     port:
       - "5672:5672" #Порт для отправки сообщений(xlsx)
-      - "" #Веб интерфейс
+      - "15672:15672" #Веб интерфейс
   backend:
     build:
       context: ./backend
@@ -13,3 +13,21 @@ services:
       - "8000:8000"
     volumes:
       - ./backend/app:/app/main
+    depends_on:
+      - rabbitmq
+      - db
+    db:
+      image: postgres:15-alpine
+      container_name: my_local_postgres
+      restart: always
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: mysecretpassword
+        POSTGRES_DB: postgres
+      ports:
+        - "5432:5432"
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
