@@ -7,6 +7,7 @@ import uuid
 import os
 from pathlib import Path
 import shutil
+from ...services.llm_service import LLMService_analyze_json
 
 router = APIRouter(prefix="/upload", tags=["upload"])
 
@@ -26,7 +27,8 @@ async def upload_data(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="расширение не поддерживается")
     
     #Уникальность файла
-    unique_filename = f"{uuid.uuid4()}{ext}"
+    task_id = str(uuid.uuid4())
+    unique_filename = f"{task_id}{ext}"
     file_path = os.path.join(data_files, unique_filename)
 
     try: 
@@ -34,19 +36,22 @@ async def upload_data(file: UploadFile = File(...)):
             shutil.copyfileobj(file.file, f)
         processor = FileProcessor()
         json_path = await processor.convert_to_json(file_path)
-        """
-        Проверка на ничего в файлах, но у меня linux и нету office 
+
         if os.path.getsize(file_path) == 0:
             os.remove(file_path)
             raise HTTPException(status_code=400, detail = "в файле ничего нету")
+        
         """
+        llm_service = LLMService_analyze_json()
+        llm_answer = await llm_service.analyze_json_file(json_path, question)
+        """
+
         return {
             "task_id": unique_filename.replace(ext, ""),
             "message": "Файл конвертирован в JSON",
             "json_path": json_path,
             "original_deleted": True
         }
-    
     except HTTPException:
         raise
     except Exception as e:
